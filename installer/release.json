@@ -1,0 +1,11 @@
+{
+  "_comment": "版本號一律取自 package.json 的 version。每次發版前修改本檔的 minimumVersion / mandatory / notes，再執行 build_installer.ps1 與 publish_release.ps1。",
+  "githubRepo": "wasonisgood/shoyodo-archive-desk",
+  "installerFileName": "ShoyodoArchiveDesk-Setup.exe",
+  "minimumVersion": "1.0.0",
+  "mandatory": false,
+  "notes": {
+    "zh": "・完善書單撤回機制：切換書單為「私人」或「管理員共有」時，自動自前台撤回品項（標回非公開）。\n・增強雲端書單註冊：公開書單時同步將書單名稱與品項歸屬關聯寫入雲端 Firestore，在前台自動呈現篩選標籤。\n・支援多重書單歸屬關聯保存。",
+    "ja": "・書単の非公開切替に対応：書単を「私人」「管理者共有」に変更した際、公開品目を自動で非公開へと連動引き下げ。\n・書単メタデータのクラウド同期強化：公開時に書単名を登録し、フロントエンドでの絞り込みに対応。\n・複数書単所属の永続化を改善。"
+  }
+}

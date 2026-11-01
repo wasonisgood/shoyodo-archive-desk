@@ -1,0 +1,49 @@
+{
+  "name": "old-thing-search-desktop",
+  "private": true,
+  "version": "1.0.7",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "app": "electron .",
+    "start": "vite build && electron .",
+    "dist": "npm run build && electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.shoyodo.oldthingsearch",
+    "productName": "蕉葉堂巡回台帳",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "app.ico"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "app.ico"
+    }
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "firebase": "^13.1.0",
+    "lucide-react": "^1.16.0",
+    "playwright-core": "^1.64.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.0"
+  }
+}

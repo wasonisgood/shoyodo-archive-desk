@@ -1,0 +1,470 @@
+/* ───────── 蕉葉堂：紙・墨・朱の三色を基本に ───────── */
+:root {
+  --paper: #f2ede2;
+  --paper-deep: #e8e0cd;
+  --paper-card: #f7f3ea;
+  --ink: #23201b;
+  --ink-soft: #5d554a;
+  --ink-faint: #8d8475;
+  --rule: #2a2620;
+  --hair: #cbbfa8;
+  --shu: #ad3a2a; /* 朱 */
+  --ai: #2c4266; /* 藍 */
+  --wood: #6e5a42;
+
+  /* 分類色 --c-{代碼} は lib/categories.ts から DataProvider が書き出す */
+
+  --mincho: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif CJK JP', 'Noto Serif TC', serif;
+  --gothic: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans CJK JP', 'Noto Sans TC', sans-serif;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mincho);
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'palt' 0;
+}
+
+a {
+  color: var(--ai);
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+  letter-spacing: 0.08em;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+::selection {
+  background: var(--shu);
+  color: var(--paper);
+}
+
+.gothic {
+  font-family: var(--gothic);
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+@media (min-width: 760px) {
+  .shell {
+    padding: 0 32px;
+  }
+}
+
+/* ───────── 罫線 ───────── */
+.rule-double {
+  border: 0;
+  border-top: 3px double var(--rule);
+  margin: 0;
+}
+.rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+}
+.rule-hair {
+  border: 0;
+  border-top: 1px solid var(--hair);
+  margin: 0;
+}
+
+/* ───────── 見出し：左に朱の短線 ───────── */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 20px;
+}
+.section-head h2 {
+  font-size: 1.35rem;
+}
+.section-head .en {
+  font-family: var(--gothic);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.2em;
+}
+.section-head .aside {
+  margin-left: auto;
+  font-family: var(--gothic);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.section-head::before {
+  content: '';
+  align-self: center;
+  width: 4px;
+  height: 1.1em;
+  background: var(--shu);
+}
+
+/* ───────── 印（朱の落款） ───────── */
+.seal {
+  display: inline-grid;
+  place-items: center;
+  background: var(--shu);
+  color: var(--paper);
+  font-family: var(--mincho);
+  font-weight: 800;
+  line-height: 1;
+  border: 2px solid var(--shu);
+  outline: 1px solid var(--paper);
+  outline-offset: -5px;
+}
+
+/* ───────── 縦書き ───────── */
+.tate {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* ───────── ボタン ───────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--gothic);
+  font-size: 0.88rem;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: 0;
+  transition: background 0.12s;
+}
+.btn:hover {
+  background: var(--paper-deep);
+  text-decoration: none;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-shu {
+  background: var(--shu);
+  border-color: var(--shu);
+  color: var(--paper);
+}
+.btn-shu:hover {
+  background: #93301f;
+}
+.btn-ink {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.btn-ink:hover {
+  background: #000;
+}
+.btn-quiet {
+  border-color: transparent;
+  padding: 4px 8px;
+  color: var(--ai);
+}
+.btn-sm {
+  padding: 3px 10px;
+  font-size: 0.78rem;
+}
+
+/* ───────── フォーム ───────── */
+.field {
+  display: grid;
+  gap: 4px;
+}
+.field > span {
+  font-family: var(--gothic);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.12em;
+}
+.field input[type='text'],
+.field input[type='number'],
+.field input[type='email'],
+.field input[type='password'],
+.field input[type='search'],
+.field input:not([type]),
+.field select,
+.field textarea,
+.input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-card);
+  border-radius: 0;
+  outline: none;
+}
+.field textarea {
+  border: 1px solid var(--hair);
+  border-bottom-color: var(--rule);
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.7;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.input:focus {
+  background: #fffdf7;
+  border-bottom-color: var(--shu);
+  box-shadow: 0 1px 0 var(--shu);
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--gothic);
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+.check input {
+  accent-color: var(--shu);
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px 24px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .form-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .span-2 {
+    grid-column: span 2;
+  }
+  .span-3 {
+    grid-column: span 3;
+  }
+  .span-4 {
+    grid-column: span 4;
+  }
+  .span-6 {
+    grid-column: span 6;
+  }
+}
+
+/* ───────── 小さな注記 ───────── */
+.muted {
+  color: var(--ink-soft);
+}
+.faint {
+  color: var(--ink-faint);
+}
+.small {
+  font-size: 0.82rem;
+}
+.notice {
+  border: 1px solid var(--shu);
+  border-left-width: 4px;
+  padding: 10px 14px;
+  background: var(--paper-card);
+  font-size: 0.9rem;
+}
+.banner {
+  background: var(--ink);
+  color: var(--paper-deep);
+  font-family: var(--gothic);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 4px 16px;
+}
+
+/* ───────── 定義表（書誌カード） ───────── */
+.dl {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+.dl dt,
+.dl dd {
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.dl dt {
+  font-family: var(--gothic);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.15em;
+  padding-top: 12px;
+}
+
+/* ───────── 目次の点線リーダー ───────── */
+.leader {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.leader .dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--ink-faint);
+  transform: translateY(-5px);
+}
+
+/* ───────── タブ ───────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tabs button,
+.tabs a {
+  padding: 8px 18px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--gothic);
+  font-size: 0.88rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.tabs .on {
+  border-color: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ───────── チップ（分類の切替） ───────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  padding: 2px 12px;
+  border: 1px solid var(--hair);
+  background: transparent;
+  font-family: var(--gothic);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+.chip.on {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.chip .n {
+  margin-left: 6px;
+  opacity: 0.7;
+  font-size: 0.72rem;
+}
+
+.cat-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  vertical-align: 1px;
+}
+
+/* ───────── 表 ───────── */
+.ledger {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.ledger th {
+  font-family: var(--gothic);
+  font-weight: 500;
+  font-size: 0.74rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
+  text-align: left;
+  padding: 8px 10px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 3px double var(--rule);
+  white-space: nowrap;
+}
+.ledger td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--hair);
+  vertical-align: top;
+}
+.ledger tbody tr:hover td {
+  background: var(--paper-card);
+}
+.ledger .num {
+  font-family: var(--gothic);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+
+.page {
+  padding: 36px 0 72px;
+}
+
+.empty {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--ink-faint);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}

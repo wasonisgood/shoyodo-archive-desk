@@ -1,0 +1,89 @@
+/* ───────── 蕉葉堂 & 和風選物美學調色盤 ───────── */
+:root {
+  --paper: #f4efe6;
+  --paper-deep: #e8e0d0;
+  --paper-card: #fcfaf5;
+  --paper-hover: #ede6d7;
+  
+  --ink: #221f1a;
+  --ink-soft: #5c5549;
+  --ink-faint: #918776;
+  --ink-subtle: #b6ad9d;
+
+  --rule: #2a2620;
+  --hair: #ded6c5;
+  --hair-strong: #c2b6a0;
+
+  --shu: #9a3424;       /* 朱色 - 象徵日本古印、特選 */
+  --shu-light: #faecea;
+  --ai: #293b52;        /* 藍染 - 象徵古書封面、外部連結 */
+  --ai-light: #eef2f6;
+  --wood: #6a5740;      /* 木色 - 窗框與台帳 */
+  --kinari: #d6973d;    /* 芥子色 - 警報與星號 */
+  --matcha: #43694f;    /* 抹茶 - 稼働中與成功 */
+  --matcha-light: #edf5f0;
+
+  --mincho: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif CJK JP', serif;
+  --gothic: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans CJK JP', sans-serif;
+  --serif-en: 'Cormorant Garamond', 'Times New Roman', serif;
+  
+  --shadow-washi: 0 4px 16px rgba(42, 38, 32, 0.06), 0 1px 3px rgba(42, 38, 32, 0.04);
+  --shadow-float: 0 12px 32px rgba(42, 38, 32, 0.12);
+  --border-radius-stamp: 2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #171513; /* 外層深色墨底，襯托 Windows 程式視窗 */
+  color: var(--ink);
+  font-family: var(--mincho);
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+  -webkit-font-smoothing: antialiased;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* 和紙纖維紋理背景模擬 */
+.washi-pattern {
+  background-color: var(--paper);
+  background-image: 
+    radial-gradient(var(--paper-deep) 0.75px, transparent 0.75px),
+    radial-gradient(var(--paper-deep) 0.75px, var(--paper) 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+/* 滾動條古典細緻化 */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hair-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-faint);
+}
+
+/* 按鈕與標籤共通 */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}

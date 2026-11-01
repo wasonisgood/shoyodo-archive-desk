@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>蕉葉堂 巡回台帳 — 配備案内</title>
+  <hta:application 
+    id="shoyodoInstaller"
+    applicationname="蕉葉堂 巡回台帳 安裝程序"
+    border="none"
+    borderstyle="normal"
+    caption="no"
+    contextmenu="no"
+    maximizebutton="no"
+    minimizebutton="no"
+    navigable="no"
+    scroll="no"
+    selection="no"
+    showintaskbar="yes"
+    singleinstance="yes"
+    sysmenu="no"
+    windowstate="normal"
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 680px;
+      height: 500px;
+      background-color: #f2ede2;
+      color: #23201b;
+      font-family: 'Shippori Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'Noto Serif CJK JP', 'MS Mincho', serif;
+      overflow: hidden;
+      border: 1px solid #2a2620;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
+    }
+
+    /* 頂部和風深墨標題列 */
+    .installer-titlebar {
+      height: 40px;
+      background-color: #1a1714;
+      color: #ede5d5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #363027;
+      cursor: default;
+    }
+
+    .titlebar-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .seal-box {
+      width: 22px;
+      height: 22px;
+      background-color: #ad3a2a;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+      text-align: center;
+      line-height: 22px;
+      border-radius: 2px;
+      margin-right: 10px;
+    }
+
+    .titlebar-text {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      color: #ede5d5;
+      font-weight: 500;
+    }
+
+    .titlebar-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 1px solid #554a3e;
+      color: #cbbfa8;
+      font-size: 11px;
+      padding: 2px 7px;
+      cursor: pointer;
+      font-family: 'Zen Kaku Gothic New', 'Yu Gothic', sans-serif;
+      margin-right: 12px;
+    }
+    .lang-btn:hover {
+      background-color: #2c251f;
+      color: #fff;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: #8c8270;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 10px;
+      line-height: 1;
+    }
+    .close-btn:hover {
+      background-color: #ad3a2a;
+      color: #ffffff;
+    }
+
+    /* 主內容容器 */
+    .installer-body {
+      padding: 28px 38px 24px;
+      height: 460px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .header-area {
+      border-bottom: 1px solid #cbbfa8;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kicker {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: #8d8475;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .mast-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      color: #23201b;
+    }
+
+    .mast-lead {
+      font-size: 12px;
+      color: #5d554a;
+      line-height: 1.7;
+      letter-spacing: 0.04em;
+    }
+
+    /* 卡片區 */
+    .step-card {
+      background-color: #f7f3ea;
+      border: 1px solid #cbbfa8;
+      padding: 22px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .field-label {
+      font-family: 'Zen Kaku Gothic New', 'Yu Gothic', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: #5d554a;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 600;
+    }
+
+    .path-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .path-input {
+      flex: 1;
+      background-color: #ffffff;
+      border: 1px solid #cbbfa8;
+      border-bottom: 2px solid #23201b;
+      padding: 7px 10px;
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 12px;
+      color: #23201b;
+      outline: none;
+      margin-right: 8px;
+    }
+
+    .btn {
+      background-color: transparent;
+      border: 1px solid #2a2620;
+      padding: 7px 18px;
+      font-family: 'Zen Kaku Gothic New', 'Yu Gothic', 'Hiragino Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      color: #23201b;
+      cursor: pointer;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+    .btn:hover {
+      background-color: #23201b;
+      color: #f2ede2;
+    }
+
+    .btn-shu {
+      background-color: #ad3a2a;
+      border-color: #ad3a2a;
+      color: #ffffff;
+    }
+    .btn-shu:hover {
+      background-color: #8e2b1d;
+      border-color: #8e2b1d;
+      color: #ffffff;
+    }
+
+    .check-row {
+      display: block;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .check-row input {
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    .check-row span {
+      font-family: 'Zen Kaku Gothic New', 'Yu Gothic', sans-serif;
+      font-size: 12px;
+      color: #423c34;
+      vertical-align: middle;
+    }
+
+    .size-badge {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 11px;
+      color: #8d8475;
+      font-family: 'Zen Kaku Gothic New', 'Yu Gothic', sans-serif;
+      border-top: 1px dashed #dcd3c1;
+      padding-top: 8px;
+      width: 100%;
+    }
+
+    /* 水墨進度條 */
+    .progress-box {
+      margin-top: 16px;
+    }
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background-color: #dcd3c1;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #cbbfa8;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background-color: #ad3a2a;
+      transition: width 0.25s ease;
+    }
+    .progress-status {
+      font-size: 12px;
+      color: #5d554a;
+      margin-top: 10px;
+      letter-spacing: 0.08em;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* 完成狀態大印鑑 */
+    .complete-box {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .seal-large {
+      width: 58px;
+      height: 58px;
+      border: 2px solid #ad3a2a;
+      color: #ad3a2a;
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 auto 14px;
+      line-height: 54px;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    /* 底部操作欄 */
+    .foot-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #cbbfa8;
+      padding-top: 14px;
+    }
+
+    .foot-note {
+      font-size: 11px;
+      color: #8d8475;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body onload="initWindow()">
+
+  <div class="installer-titlebar" id="dragBar">
+    <div class="titlebar-left">
+      <div class="seal-box">蕉</div>
+      <span class="titlebar-text" id="tbTitle">蕉葉堂 巡回台帳 ・ 配備案内</span>
+    </div>
+    <div class="titlebar-right">
+      <button class="lang-btn" id="btnToggleLang" onclick="toggleLanguage()">切換為繁體中文</button>
+      <button class="close-btn" onclick="window.close()" title="終了">✕</button>
+    </div>
+  </div>
+
+  <div class="installer-body">
+    <div class="header-area">
+      <p class="kicker">SHOYODO ARCHIVE DESK / INSTALLATION SUITE</p>
+      <h1 class="mast-title" id="pageTitle">台帳配備設定</h1>
+      <p class="mast-lead" id="pageLead">
+        本プログラムは、戦前古書・近代文献の定期巡回収集台帳をローカル環境へ直接配備します。
+      </p>
+    </div>
+
+    <!-- 步驟 1：路徑選擇 -->
+    <div class="step-card" id="stepConfig">
+      <label class="field-label" id="lblPath">配備先ディレクトリ（規定：標準プログラム庫）：</label>
+      <div class="path-row">
+        <input type="text" class="path-input" id="installPath" value="" />
+        <button class="btn" id="btnBrowse" onclick="browseFolder()">［ 参照 ］</button>
+      </div>
+      <label class="check-row">
+        <input type="checkbox" id="chkDesktop" checked />
+        <span id="lblDesktop">デスクトップに「蕉葉堂 巡回台帳」の即時起動アイコンを作成する</span>
+      </label>
+      <label class="check-row">
+        <input type="checkbox" id="chkStartMenu" checked />
+        <span id="lblStartMenu">スタートメニューに台帳プログラムを登録する</span>
+      </label>
+      <div class="size-badge" id="lblSizeBadge">
+        所要ディスク容量：約 410 MB ｜ 配備完了後は 0.5 秒で瞬時に起動します。
+      </div>
+    </div>
+
+    <!-- 步驟 2：進度展示 -->
+    <div class="step-card" id="stepProgress" style="display: none;">
+      <div style="font-weight: 700; font-size: 15px; margin-bottom: 8px; color: #23201b;" id="progressTitle">
+        台帳リソースを展開中...
+      </div>
+      <div class="progress-box">
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-status">
+          <span id="statusText">初期化処理を実行中...</span>
+          <span id="percentText">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步驟 3：安裝完畢 -->
+    <div class="step-card" id="stepComplete" style="display: none;">
+      <div class="complete-box">
+        <div class="seal-large">完</div>
+        <div style="font-size: 18px; font-weight: 700; letter-spacing: 0.15em; margin-bottom: 8px; color: #23201b;" id="completeTitle">
+          台帳の配備が完了しました
+        </div>
+        <div style="font-size: 12px; color: #5d554a; line-height: 1.8;" id="completeDesc">
+          「蕉葉堂 巡回台帳」が正常にコンピュータへ配備されました。<br>
+          作成されたデスクトップアイコンより、いつでも瞬時に起動可能です。
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部按鈕區 -->
+    <div class="foot-bar">
+      <span class="foot-note">© SHOYODO ARCHIVE DESK / 蕉葉文庫 書誌編纂係</span>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn" id="btnCancel" onclick="window.close()">［ 中止 ］</button>
+        <button class="btn btn-shu" id="btnAction" onclick="startInstall()">［ 配備を開始する ］</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var currentLang = 'ja';
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+    var shell = new ActiveXObject("WScript.Shell");
+    var shellApp = new ActiveXObject("Shell.Application");
+
+    var i18n = {
+      ja: {
+        toggleBtn: "切換為繁體中文",
+        tbTitle: "蕉葉堂 巡回台帳 ・ 配備案内",
+        pageTitle: "台帳配備設定",
+        pageLead: "本プログラムは、戦前古書・近代文献の定期巡回収集台帳をローカル環境へ直接配備します。",
+        lblPath: "配備先ディレクトリ（規定：標準プログラム庫）：",
+        btnBrowse: "［ 参照 ］",
+        lblDesktop: "デスクトップに「蕉葉堂 巡回台帳」の即時起動アイコンを作成する",
+        lblStartMenu: "スタートメニューに台帳プログラムを登録する",
+        lblSizeBadge: "所要ディスク容量：約 410 MB ｜ 配備完了後は 0.5 秒で瞬時に起動します。",
+        btnCancel: "［ 中止 ］",
+        btnAction: "［ 配備を開始する ］",
+        progressTitle: "台帳リソースを展開中...",
+        initStatus: "初期化処理を実行中...",
+        step1: "配備先フォルダを準備中...",
+        step2: "Chromium コアおよび和風書誌リソースを配置中...",
+        step3: "デスクトップ即時起動インデックスを作成中...",
+        step4: "配備が完了しました。",
+        completeTitle: "台帳の配備が完了しました",
+        completeDesc: "「蕉葉堂 巡回台帳」が正常にコンピュータへ配備されました。<br>作成されたデスクトップアイコンより、いつでも瞬時に起動可能です。",
+        btnLaunch: "［ 直ちに台帳を起動 ］",
+        alertPath: "有効な配備先パスを入力してください。"
+      },
+      zh: {
+        toggleBtn: "日本語に切替",
+        tbTitle: "蕉葉堂 巡回台帳 ・ 安裝指南",
+        pageTitle: "台帳安裝設定",
+        pageLead: "本程序將於本機直接部署戰前古書、近代文獻定期巡回收集台帳，免除解壓延遲。",
+        lblPath: "安裝目標目錄（預設：本機程式庫）：",
+        btnBrowse: "［ 瀏覽 ］",
+        lblDesktop: "在桌面建立「蕉葉堂 巡回台帳」秒開啟動捷徑",
+        lblStartMenu: "在開始功能表註冊書誌巡回台帳項目",
+        lblSizeBadge: "所需磁碟空間：約 410 MB ｜ 安裝完畢後點擊即 0.5 秒極速秒開。",
+        btnCancel: "［ 中止 ］",
+        btnAction: "［ 開始安裝 ］",
+        progressTitle: "正在部署台帳核心檔案...",
+        initStatus: "正在初始化安裝環境...",
+        step1: "正在建立目標檔案目錄...",
+        step2: "正在複製 Chromium 核心與和風書誌資產...",
+        step3: "正在配置桌面極速秒開啟動捷徑...",
+        step4: "部署完畢。",
+        completeTitle: "台帳配置完備",
+        completeDesc: "「蕉葉堂 巡回台帳」已順利安裝至您的電腦。<br>桌面捷徑已建立，日常使用直接點擊即可 0.5 秒極速秒開運作。",
+        btnLaunch: "［ 立即開啟台帳 ］",
+        alertPath: "請輸入有效的安裝路徑。"
+      }
+    };
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      var d = i18n[lang];
+      document.getElementById("btnToggleLang").innerText = d.toggleBtn;
+      document.getElementById("tbTitle").innerText = d.tbTitle;
+      document.getElementById("pageTitle").innerText = d.pageTitle;
+      document.getElementById("pageLead").innerText = d.pageLead;
+      document.getElementById("lblPath").innerText = d.lblPath;
+      document.getElementById("btnBrowse").innerText = d.btnBrowse;
+      document.getElementById("lblDesktop").innerText = d.lblDesktop;
+      document.getElementById("lblStartMenu").innerText = d.lblStartMenu;
+      document.getElementById("lblSizeBadge").innerText = d.lblSizeBadge;
+      document.getElementById("btnCancel").innerText = d.btnCancel;
+      document.getElementById("btnAction").innerText = d.btnAction;
+      document.getElementById("progressTitle").innerText = d.progressTitle;
+      document.getElementById("completeTitle").innerText = d.completeTitle;
+      document.getElementById("completeDesc").innerHTML = d.completeDesc;
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLang === 'ja' ? 'zh' : 'ja');
+    }
+
+    function initWindow() {
+      window.resizeTo(680, 500);
+      var screenWidth = window.screen.availWidth;
+      var screenHeight = window.screen.availHeight;
+      window.moveTo((screenWidth - 680) / 2, (screenHeight - 500) / 2);
+
+      var localApp = shell.ExpandEnvironmentStrings("%LocalAppData%");
+      document.getElementById("installPath").value = localApp + "\\Programs\\ShoyodoArchiveDesk";
+      setLanguage('zh'); // 預設使用繁體中文
+    }
+
+    function browseFolder() {
+      try {
+        var folder = shellApp.BrowseForFolder(0, currentLang === 'ja' ? "配備先フォルダを選択" : "請選擇安裝目錄", 0, 17);
+        if (folder != null) {
+          var path = folder.Self.Path;
+          if (path) {
+            document.getElementById("installPath").value = path + "\\ShoyodoArchiveDesk";
+          }
+        }
+      } catch(e) {}
+    }
+
+    function startInstall() {
+      var d = i18n[currentLang];
+      var targetDir = document.getElementById("installPath").value.replace(/^\s+|\s+$/g, '');
+      if (!targetDir) {
+        alert(d.alertPath);
+        return;
+      }
+
+      document.getElementById("stepConfig").style.display = "none";
+      document.getElementById("stepProgress").style.display = "flex";
+      document.getElementById("btnCancel").style.display = "none";
+      document.getElementById("btnAction").disabled = true;
+      document.getElementById("btnAction").innerText = "...";
+
+      var barEl = document.getElementById("progressBar");
+      var pctEl = document.getElementById("percentText");
+      var statusEl = document.getElementById("statusText");
+
+      function update(p, msg) {
+        barEl.style.width = p + "%";
+        pctEl.innerText = p + "%";
+        statusEl.innerText = msg;
+      }
+
+      // Step 1: 建立目標資料夾
+      setTimeout(function() {
+        update(15, d.step1);
+        try {
+          if (!fso.FolderExists(targetDir)) {
+            var parts = targetDir.split("\\");
+            var cur = parts[0];
+            for (var i = 1; i < parts.length; i++) {
+              cur += "\\" + parts[i];
+              if (!fso.FolderExists(cur)) {
+                try { fso.CreateFolder(cur); } catch(err) {}
+              }
+            }
+          }
+        } catch(e) {}
+      }, 300);
+
+      // Step 2: 解壓或複製核心程式庫
+      setTimeout(function() {
+        update(45, d.step2);
+        try {
+          var scriptPath = window.location.pathname.replace(/^\//, '');
+          var htaFolder = fso.GetParentFolderName(scriptPath);
+          var parentFolder = fso.GetParentFolderName(htaFolder);
+          
+          var zipFile = "";
+          if (fso.FileExists(htaFolder + "\\app-payload.zip")) {
+            zipFile = htaFolder + "\\app-payload.zip";
+          } else if (fso.FileExists(parentFolder + "\\installer\\app-payload.zip")) {
+            zipFile = parentFolder + "\\installer\\app-payload.zip";
+          } else if (fso.FileExists(parentFolder + "\\app-payload.zip")) {
+            zipFile = parentFolder + "\\app-payload.zip";
+          }
+
+          var srcDir = "";
+          if (fso.FolderExists(parentFolder + "\\release\\win-unpacked")) {
+            srcDir = parentFolder + "\\release\\win-unpacked";
+          } else if (fso.FolderExists(htaFolder + "\\win-unpacked")) {
+            srcDir = htaFolder + "\\win-unpacked";
+          }
+
+          if (zipFile !== "") {
+            var psCmd = 'powershell.exe -NoProfile -WindowStyle Hidden -Command "Expand-Archive -LiteralPath \'' + zipFile + '\' -DestinationPath \'' + targetDir + '\' -Force"';
+            shell.Run(psCmd, 0, true);
+          } else if (srcDir !== "") {
+            fso.CopyFolder(srcDir, targetDir, true);
+          }
+        } catch(e) {}
+      }, 900);
+
+      // Step 3: 建立捷徑
+      setTimeout(function() {
+        update(80, d.step3);
+        try {
+          var exePath = targetDir + "\\蕉葉堂巡回台帳.exe";
+          if (document.getElementById("chkDesktop").checked) {
+            var deskDir = shell.SpecialFolders("Desktop");
+            var lnk = shell.CreateShortcut(deskDir + "\\蕉葉堂 巡回台帳.lnk");
+            lnk.TargetPath = exePath;
+            lnk.WorkingDirectory = targetDir;
+            lnk.Description = "蕉葉堂 巡回台帳 — 戦前資料定期収集機";
+            lnk.Save();
+          }
+          if (document.getElementById("chkStartMenu").checked) {
+            var startDir = shell.SpecialFolders("StartMenu") + "\\Programs";
+            var lnk2 = shell.CreateShortcut(startDir + "\\蕉葉堂 巡回台帳.lnk");
+            lnk2.TargetPath = exePath;
+            lnk2.WorkingDirectory = targetDir;
+            lnk2.Save();
+          }
+        } catch(e) {}
+      }, 1600);
+
+      // Step 4: 完成部署
+      setTimeout(function() {
+        update(100, d.step4);
+        document.getElementById("stepProgress").style.display = "none";
+        document.getElementById("stepComplete").style.display = "flex";
+        document.getElementById("pageTitle").innerText = d.completeTitle;
+        document.getElementById("pageLead").innerText = currentLang === 'ja' 
+          ? "環境の配備が正常に完了しました。" 
+          : "已順利完成全部環境部署與極速秒開啟動捷徑設定。";
+
+        var actBtn = document.getElementById("btnAction");
+        actBtn.disabled = false;
+        actBtn.innerText = d.btnLaunch;
+        actBtn.onclick = function() {
+          try {
+            shell.Run('"' + targetDir + '\\蕉葉堂巡回台帳.exe"');
+          } catch(e) {}
+          window.close();
+        };
+      }, 2200);
+    }
+  </script>
+</body>
+</html>

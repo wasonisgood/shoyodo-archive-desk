@@ -1,0 +1,798 @@
+/* ───────── 蕉葉堂 巡回台帳（古物搜尋桌面端）増補與修復樣式 ───────── */
+
+/* 0. 全域自繪古典墨痕細捲軸（徹底消滅 Windows 預設粗糙白灰滾動條，杜絕雙重滾動） */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hair-strong) var(--paper-deep);
+  background-color: var(--paper);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* 視窗本身不捲動，捲軸只出現在標題列下方的內容區 */
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+/* 應用外框：深墨選單列固定於頂端，下方為唯一捲動區 */
+.app-root-frame {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.app-scroll-region {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: scroll; /* 維持單一捲軸槽位，防止頁面切換時因寬度跳動產生的抖動 */
+  position: relative;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hair-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-soft);
+}
+
+/* 1. 自描頂部視窗控制邊緣與選單列 (Custom Antique Window Titlebar & Menu) */
+.custom-window-titlebar {
+  height: 36px;
+  background: #1f1c18;
+  color: #dfd8c8;
+  border-bottom: 1px solid #363027;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0 14px;
+  font-family: var(--gothic);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  user-select: none;
+  flex: 0 0 36px;
+  position: relative;
+  z-index: 999;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-seal {
+  width: 20px;
+  height: 20px;
+  background: var(--shu);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mincho);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.titlebar-brand-name {
+  font-family: var(--mincho);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ede5d5;
+  letter-spacing: 0.12em;
+  margin-right: 6px;
+}
+
+/* 自繪選單條 */
+.custom-menu-strip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.menu-item-wrap {
+  position: relative;
+}
+
+.menu-trigger {
+  background: none;
+  border: none;
+  color: #a89f8f;
+  font-family: var(--gothic);
+  font-size: 0.76rem;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.menu-trigger:hover,
+.menu-trigger.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* 下拉選單層 */
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: #25211c;
+  border: 1px solid #4a4133;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  min-width: 220px;
+  padding: 4px 0;
+  z-index: 1000;
+  animation: menuFadeIn 0.15s ease-out;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #d6ccba;
+  font-size: 0.76rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.12s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--shu);
+  color: #fff;
+}
+
+.dropdown-item.selected {
+  color: #fff;
+  font-weight: 600;
+}
+
+.shortcut-hint {
+  font-size: 0.68rem;
+  color: #8c8270;
+}
+.dropdown-item:hover .shortcut-hint {
+  color: #f7dcd8;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #383126;
+  margin: 4px 0;
+}
+
+/* 視窗中央拖曳區 */
+.titlebar-center-drag {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-app-region: drag;
+  cursor: default;
+}
+
+.titlebar-subtle-hint {
+  font-size: 0.7rem;
+  color: #6d6455;
+  letter-spacing: 0.1em;
+}
+
+/* 視窗右側控制鈕 */
+.titlebar-controls {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-btn {
+  width: 44px;
+  height: 100%;
+  background: none;
+  border: none;
+  color: #9c9180;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.titlebar-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.titlebar-btn.close-btn:hover {
+  background: #9a3424;
+  color: #fff;
+}
+
+.btn-glyph {
+  font-size: 11px;
+  line-height: 1;
+  font-family: var(--mincho);
+}
+
+/* 2. 導覽列按鈕樣式修復（徹底解決按鈕未套到 CSS 脫落問題） */
+.mast-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 44px;
+  margin-top: 28px;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--hair);
+}
+
+.mast-nav a,
+.mast-nav button.nav-btn {
+  background: none !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  cursor: pointer;
+  display: grid;
+  justify-items: center;
+  color: var(--ink);
+  line-height: 1.4;
+  padding: 0 4px 4px 4px !important;
+  font-family: inherit;
+  outline: none;
+  text-decoration: none !important;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.mast-nav a:hover,
+.mast-nav button.nav-btn:hover {
+  color: var(--shu);
+}
+
+.mast-nav a.on,
+.mast-nav button.nav-btn.on {
+  border-bottom-color: var(--shu) !important;
+}
+
+.mast-nav a .ja,
+.mast-nav button.nav-btn .ja {
+  font-family: var(--mincho);
+  font-size: 0.98rem;
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
+  transition: color 0.18s ease;
+}
+
+.mast-nav a.on .ja,
+.mast-nav button.nav-btn.on .ja {
+  color: var(--shu) !important;
+  font-weight: 700;
+}
+
+.mast-nav a .en,
+.mast-nav button.nav-btn .en {
+  font-family: var(--serif-en);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  font-style: italic;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* 3. 參數設定頁面正統和風表單樣式修復（遵循 japan-old-thing 原生規範） */
+.settings-box {
+  background: var(--paper-card);
+  border: 1px solid var(--hair);
+  padding: 28px 32px;
+  margin-bottom: 32px;
+}
+
+.settings-box-title {
+  font-family: var(--mincho);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 12px;
+  margin: 0 0 20px 0;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+/* 標籤 Tag 編輯框 */
+.kw-tag-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--paper-card);
+  border-bottom: 1px solid var(--rule);
+  min-height: 42px;
+  align-items: center;
+}
+
+.kw-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--paper-deep);
+  border: 1px solid var(--hair);
+  color: var(--ink);
+  font-size: 0.76rem;
+  padding: 2px 8px;
+  font-family: var(--mincho);
+}
+.kw-tag.exclude {
+  border-color: #d88;
+  color: var(--shu);
+}
+.kw-tag .del-btn {
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  line-height: 1;
+}
+.kw-tag .del-btn:hover {
+  color: var(--shu);
+}
+
+.kw-input-inline {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  flex: 1;
+  min-width: 130px;
+  font-size: 0.84rem;
+  font-family: inherit;
+  padding: 2px 4px !important;
+}
+
+.kw-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.kw-preset-chip {
+  font-family: var(--mincho);
+  font-size: 0.76rem;
+  padding: 2px 8px;
+  border: 1px solid var(--hair);
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.kw-preset-chip:hover {
+  border-color: var(--shu);
+  color: var(--shu);
+}
+
+/* 市場選擇卡片 */
+.market-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  margin-bottom: 8px;
+  transition: border-color 0.15s ease;
+}
+.market-row:hover {
+  border-color: var(--rule);
+}
+.market-row .site-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.market-row .site-desc {
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+/* 4. 開卷開場動畫層 (Opening Splash Screen) */
+.opening-splash-curtain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--paper);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.opening-splash-curtain.fade-out {
+  opacity: 0;
+  transform: scale(1.02);
+  pointer-events: none;
+}
+
+.opening-inner-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 460px;
+  padding: 40px;
+}
+
+.opening-seal-container {
+  margin-bottom: 24px;
+}
+
+.opening-main-seal {
+  width: 76px;
+  height: 76px;
+  border: 3px solid var(--shu);
+  color: var(--shu);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-family: var(--mincho);
+  position: relative;
+  opacity: 0;
+  transform: scale(1.35) rotate(-3deg);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 0 0 2px rgba(154, 52, 36, 0.2);
+}
+
+.opening-main-seal.stamped {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.opening-main-seal .seal-char {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.opening-main-seal .seal-sub {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  margin-top: 2px;
+}
+
+.opening-titles-block {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.opening-titles-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.opening-kicker {
+  font-family: var(--serif-en);
+  font-size: 0.74rem;
+  letter-spacing: 0.25em;
+  color: var(--ink-faint);
+  margin: 0 0 8px;
+}
+
+.opening-title {
+  font-family: var(--mincho);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
+  color: var(--ink);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.opening-subtitle {
+  font-family: var(--gothic);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin: 0 0 28px;
+}
+
+.opening-progress-track {
+  width: 140px;
+  height: 2px;
+  background: var(--hair);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.opening-progress-ink {
+  width: 100%;
+  height: 100%;
+  background: var(--rule);
+  transform: translateX(-100%);
+  animation: inkFlow 1.6s ease-in-out infinite;
+}
+
+@keyframes inkFlow {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+.opening-skip-hint {
+  font-family: var(--mincho);
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.15em;
+}
+
+/* 5. 視圖切換平滑穩定容器（避免高度塌陷導致滾動條抽動重置回頂部） */
+.main-view-container {
+  min-height: calc(100vh - 320px);
+  position: relative;
+}
+
+.page-view-transition {
+  animation: pageViewReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageViewReveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 6. 監視終端機（宣紙墨色，無Emoji） */
+.terminal-board {
+  background: #1e1b18;
+  color: #dcd4c6;
+  border: 1px solid #3d352b;
+  padding: 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  height: 480px;
+  overflow-y: auto;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.terminal-board::-webkit-scrollbar {
+  width: 5px;
+}
+.terminal-board::-webkit-scrollbar-thumb {
+  background: #4a4134;
+}
+
+.terminal-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.terminal-row .t-time {
+  color: #7d7363;
+  white-space: nowrap;
+}
+.terminal-row .t-site {
+  color: #92a4bc;
+  white-space: nowrap;
+}
+.terminal-row .t-msg {
+  flex: 1;
+  word-break: break-all;
+}
+.terminal-row .t-msg.success {
+  color: #a8cf8c;
+}
+.terminal-row .t-msg.warn {
+  color: #e5b367;
+}
+
+/* 7. 卡片與詳細品目和風浮動層 */
+.ware-card-link {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-card);
+  border: 1px solid var(--hair);
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+  cursor: pointer;
+}
+.ware-card-link:hover {
+  border-color: var(--rule);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.ware-cover-box {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: var(--paper-deep);
+  overflow: hidden;
+  border-bottom: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ware-cover-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.ware-card-link:hover .ware-cover-box img {
+  transform: scale(1.02);
+}
+
+.source-stamp {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--mincho);
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  background: rgba(242, 237, 226, 0.94);
+  color: var(--ai);
+  border: 1px solid var(--ai);
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+}
+.source-stamp.yahoo {
+  color: var(--wood);
+  border-color: var(--wood);
+}
+.source-stamp.mercari {
+  color: var(--shu);
+  border-color: var(--shu);
+}
+
+.new-seal {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: var(--mincho);
+  font-size: 0.68rem;
+  padding: 1px 5px;
+  background: var(--shu);
+  color: #fff;
+  border: 1px solid var(--shu);
+  letter-spacing: 0.1em;
+}
+
+.ware-info {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.ware-info h3 {
+  font-size: 0.96rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.ware-info .ware-meta {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.ware-info .ware-price-row {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px dashed var(--hair);
+}
+.ware-info .ware-price {
+  font-family: var(--serif-en), var(--mincho);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.ware-info .ware-price.highlight {
+  color: var(--shu);
+}
+
+.colophon-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(35, 32, 27, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.colophon-dialog-box {
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  max-width: 860px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 36px 40px;
+  position: relative;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  animation: dialogReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes dialogReveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.colophon-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--ink-faint);
+  cursor: pointer;
+  line-height: 1;
+}
+.colophon-close-btn:hover {
+  color: var(--shu);
+}
